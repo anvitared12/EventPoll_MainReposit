@@ -23,7 +23,7 @@ io.on("connection",(socket)=>{
     console.log("User connected",socket.id);
 
     if(activePoll){
-        AnimationPlaybackEvent.emit("new_poll",activePoll);
+        socket.emit("new_poll",activePoll);
     }
     socket.on("create_poll",(pollData)=>{
         console.log("Poll creted",pollData);
@@ -54,6 +54,13 @@ io.on("connection",(socket)=>{
 
         pollResults.options[optionIndex].count+=1;
         io.emit("poll_update",pollResults);
+    });
+
+    socket.on("end_poll", () => {
+        console.log("Poll ended");
+        activePoll = null;
+        pollResults = { options: [] };
+        io.emit("poll_ended");
     });
 
     socket.on("disconnect",()=>{
