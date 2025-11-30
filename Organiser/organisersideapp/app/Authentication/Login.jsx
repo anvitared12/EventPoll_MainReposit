@@ -1,0 +1,145 @@
+import { View, Text , StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { useRouter, Stack } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+// import { useAuth } from '../../context/AuthContext';
+import { useState } from 'react';
+
+const Login = () => {
+    const router = useRouter();
+    // const authContext = useAuth();
+    // const { signIn } = authContext || {};
+    const [Lemail, LsetEmail] = useState('');
+    const [Lpassword, setLpassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+
+    const handleLogin = async () => {
+        setLoading(true);
+        try {
+            // TODO: Implement login logic
+            console.log('Login attempt with:', Lemail, Lpassword);
+            // Simulate login for now
+            setTimeout(() => {
+                setLoading(false);
+                router.replace('/Components/PollCreate');
+            }, 1000);
+        } catch (err) {
+            setError('Failed to login');
+            setLoading(false);
+        }
+    };
+
+    return (
+        <LinearGradient colors={['#4E270C', '#C08E45']} style={styles.container}>
+            <Stack.Screen options={{
+                headerShown: false
+            }} />
+
+            <Text style={styles.headerText}>Login</Text>
+
+            <View style={styles.inputContainer}>
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter Email"
+                    placeholderTextColor="#C4C4C4"
+                    value={Lemail}
+                    onChangeText={LsetEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    editable={!loading}
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter password"
+                    placeholderTextColor="#C4C4C4"
+                    value={Lpassword}
+                    onChangeText={setLpassword}
+                    secureTextEntry
+                    editable={!loading}
+                />
+
+            </View>
+
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity 
+                style={[styles.button, loading && styles.buttonDisabled]} 
+                onPress={handleLogin}
+                disabled={loading}
+            >
+                {loading ? (
+                    <ActivityIndicator color="#000" />
+                ) : (
+                    <Text style={styles.buttonText}>Submit</Text>
+                )}
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => router.replace('/Authentication/Sign-up')} disabled={loading}>
+                <Text style={styles.signUpText}>Don't have an account? Sign Up</Text>
+            </TouchableOpacity>
+
+        </LinearGradient>
+    )
+}
+
+export default Login;
+
+
+// StyleSheet ---------------------------------------------------------------------------------
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    headerText: {
+        fontFamily: 'RoarGuroes',
+        fontSize: 48,
+        marginBottom: 60,
+        color: '#4B2000',
+    },
+    inputContainer: {
+        width: '100%',
+        marginBottom: 50,
+    },
+    input: {
+        fontFamily: 'JuliaMono-Light',
+        fontSize: 20,
+        borderBottomWidth: 2,
+        borderBottomColor: '#2D2D2D',
+        paddingVertical: 10,
+        marginBottom: 30,
+        color: '#2D2D2D',
+    },
+    button: {
+        backgroundColor: '#4B2000',
+        paddingVertical: 15,
+        paddingHorizontal: 50,
+        borderRadius: 25,
+    },
+    buttonText: {
+        fontFamily: 'JuliaMono-Light',
+        fontSize: 24,
+        color: '#ffffffff',
+    },
+    buttonDisabled: {
+        opacity: 0.6,
+    },
+    errorText: {
+        color: '#D32F2F',
+        fontSize: 18,
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    signUpText: {
+        fontFamily: 'JuliaMono-Light',
+        fontSize: 16,
+        color: '#2D2D2D',
+        marginTop: 15,
+    },
+});
