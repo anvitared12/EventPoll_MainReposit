@@ -1,13 +1,12 @@
 import { View, Text , StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-// import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 
 const Login = () => {
     const router = useRouter();
-    // const authContext = useAuth();
-    // const { signIn } = authContext || {};
+    const { login } = useAuth();
     const [Lemail, LsetEmail] = useState('');
     const [Lpassword, setLpassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -17,21 +16,17 @@ const Login = () => {
     const handleLogin = async () => {
         setLoading(true);
         try {
-            // TODO: Implement login logic
-            console.log('Login attempt with:', Lemail, Lpassword);
-            // Simulate login for now
-            setTimeout(() => {
-                setLoading(false);
-                router.replace('/Components/PollCreate');
-            }, 1000);
+            await login(Lemail, Lpassword);
+            setLoading(false);
+            router.replace('/Components/PollCreate');
         } catch (err) {
-            setError('Failed to login');
+            setError('Failed to login: ' + err.message);
             setLoading(false);
         }
     };
 
     return (
-        <LinearGradient colors={['#4E270C', '#C08E45']} style={styles.container}>
+        <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
             <Stack.Screen options={{
                 headerShown: false
             }} />
@@ -98,17 +93,17 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     headerText: {
-        fontFamily: 'RoarGuroes',
+        fontFamily: 'Courier-Prime',
         fontSize: 48,
         marginBottom: 60,
-        color: '#4B2000',
+        color: '#1f0124ff',
     },
     inputContainer: {
         width: '100%',
         marginBottom: 50,
     },
     input: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 20,
         borderBottomWidth: 2,
         borderBottomColor: '#2D2D2D',
@@ -117,13 +112,13 @@ const styles = StyleSheet.create({
         color: '#2D2D2D',
     },
     button: {
-        backgroundColor: '#4B2000',
+        backgroundColor: '#1f0124ff',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 25,
     },
     buttonText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 24,
         color: '#ffffffff',
     },
@@ -132,14 +127,15 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: '#D32F2F',
-        fontSize: 18,
+        fontSize: 14,
         marginBottom: 15,
         textAlign: 'center',
     },
-    signUpText: {
-        fontFamily: 'JuliaMono-Light',
+    loginText: {
+        fontFamily: 'Courier-Prime',
         fontSize: 16,
-        color: '#2D2D2D',
+        color: '#1f0124ff',
         marginTop: 15,
     },
 });
+

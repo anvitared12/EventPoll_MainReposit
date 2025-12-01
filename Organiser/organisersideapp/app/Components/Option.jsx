@@ -3,26 +3,42 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import io from 'socket.io-client';
+import { database } from '../../firebaseConfig';
+import { ref, push, set, update } from 'firebase/database';
+import { useAuth } from '../context/AuthContext';
+import { Chart } from 'react-google-charts';
 
 const socket = io('http://localhost:3000'); // Replace with your server IP if needed
 
 export default function Option() {
     const router = useRouter();
+    const { user } = useAuth();
     const [name, setName] = useState('');
     const [options, setOptions] = useState(['', '']);
     const [isLive, setIsLive] = useState(false);
     const [liveResults, setLiveResults] = useState(null);
+    const [currentPollId, setCurrentPollId] = useState(null);
 
     useEffect(() => {
         socket.on("poll_update", (data) => {
             console.log("Poll update received:", data);
             setLiveResults(data);
+            
+            // Update Firebase with new vote counts
+            if (currentPollId && user) {
+                const pollRef = ref(database, `userPolls/${user.uid}/${currentPollId}`);
+                const totalVotes = data.options.reduce((sum, opt) => sum + opt.count, 0);
+                update(pollRef, {
+                    options: data.options,
+                    totalVotes: totalVotes
+                });
+            }
         });
 
         return () => {
             socket.off("poll_update");
         };
-    }, []);
+    }, [currentPollId, user]);
 
     const handleOptionChange = (text, index) => {
         const newOptions = [...options];
@@ -34,12 +50,31 @@ export default function Option() {
         setOptions([...options, '']);
     };
 
-    const goLive = () => {
+    const goLive = async () => {
         const pollData = {
             question: name,
             options: options.map((opt, index) => ({ id: index, text: opt }))
         };
         console.log('Going Live:', pollData);
+        
+        // Save to Firebase
+        if (user) {
+            const userPollsRef = ref(database, `userPolls/${user.uid}`);
+            const newPollRef = push(userPollsRef);
+            const pollId = newPollRef.key;
+            
+            await set(newPollRef, {
+                question: name,
+                options: pollData.options.map(opt => ({ ...opt, count: 0 })),
+                createdAt: Date.now(),
+                status: 'live',
+                totalVotes: 0
+            });
+            
+            setCurrentPollId(pollId);
+        }
+        
+        // Emit to socket for real-time updates
         socket.emit("create_poll", pollData);
         setIsLive(true);
         setLiveResults({
@@ -50,27 +85,73 @@ export default function Option() {
 
     if (isLive) {
         return (
-            <LinearGradient colors={['#4E270C', '#C08E45']} style={styles.container}>
+            <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
                 <Stack.Screen options={{ headerShown: false }} />
                 <Text style={styles.headerText}>Live Results</Text>
                 <Text style={styles.questionText}>{liveResults?.question}</Text>
                 
-                <ScrollView style={styles.resultsContainer}>
-                    {liveResults?.options.map((opt, index) => (
-                        <View key={index} style={styles.resultItem}>
-                            <Text style={styles.resultText}>{opt.text}</Text>
-                            <Text style={styles.countText}>{opt.count} votes</Text>
-                        </View>
-                    ))}
+                <ScrollView style={styles.mainScrollView} contentContainerStyle={styles.scrollContent}>
+                    {/* Vote Count Bars */}
+                    <View style={styles.voteBarsSection}>
+                        <Text style={styles.sectionTitle}>Vote Counts</Text>
+                        {liveResults?.options.map((opt, index) => (
+                            <View key={index} style={styles.resultItem}>
+                                <Text style={styles.resultText}>{opt.text}</Text>
+                                <Text style={styles.countText}>{opt.count} votes</Text>
+                            </View>
+                        ))}
+                    </View>
+
+                    {/* Pie Chart */}
+                    <View style={styles.chartContainer}>
+                        <Chart
+                            chartType="PieChart"
+                            data={[
+                                ["Option", "Votes"],
+                                ...liveResults?.options.map(opt => [opt.text, opt.count]) || []
+                            ]}
+                            options={{
+                                title: "Vote Distribution",
+                                pieHole: 0,
+                                is3D: false,
+                                colors: ['#1f0124', '#540863', '#7d0a91', '#9d4edd', '#c77dff', '#e0aaff'],
+                                backgroundColor: 'transparent',
+                                titleTextStyle: {
+                                    color: '#ffffff',
+                                    fontSize: 20,
+                                    fontFamily: 'Courier-Prime'
+                                },
+                                legend: {
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: 14,
+                                        fontFamily: 'Courier-Prime'
+                                    }
+                                }
+                            }}
+                            width={"100%"}
+                            height={"300px"}
+                        />
+                    </View>
                 </ScrollView>
 
                 <TouchableOpacity 
                     style={styles.button} 
-                    onPress={() => {
+                    onPress={async () => {
                         console.log('Ending Poll');
+                        
+                        // Update Firebase status to 'ended'
+                        if (currentPollId && user) {
+                            const pollRef = ref(database, `userPolls/${user.uid}/${currentPollId}`);
+                            await update(pollRef, {
+                                status: 'ended'
+                            });
+                        }
+                        
                         socket.emit("end_poll");
                         setIsLive(false);
                         setLiveResults(null);
+                        setCurrentPollId(null);
                     }}
                 >
                     <Text style={styles.buttonText}>End Poll</Text>
@@ -80,7 +161,7 @@ export default function Option() {
     }
 
     return (
-        <LinearGradient colors={['#4E270C', '#C08E45']} style={styles.container}>
+        <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
 
             <TouchableOpacity 
@@ -131,14 +212,14 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     headerText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 48,
         marginBottom: 40,
         color: '#ffffffff',
         textAlign: 'center',
     },
     questionText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 24,
         marginBottom: 30,
         color: '#ffffffff',
@@ -149,7 +230,7 @@ const styles = StyleSheet.create({
         marginBottom: 50,
     },
     input: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 20,
         borderBottomWidth: 2,
         borderBottomColor: '#2D2D2D',
@@ -158,7 +239,7 @@ const styles = StyleSheet.create({
         color: '#2D2D2D',
     },
     button: {
-        backgroundColor: '#41200A',
+        backgroundColor: '#1f0124ff',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 25,
@@ -166,7 +247,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     buttonText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 24,
         color: '#ffffffff',
     },
@@ -175,7 +256,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     addButtonText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 18,
         color: '#ffffffff',
     },
@@ -187,13 +268,14 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     backButtonText: {
-        fontFamily: 'ForemostRegular',
+        fontFamily: 'Courier-Prime',
         fontSize: 20,
-        color: '#AF7F3B',
+        color: '#240056ff',
     },
     resultsContainer: {
         width: '100%',
-        maxHeight: '50%',
+        maxHeight: '30%',
+        marginBottom: 15,
     },
     resultItem: {
         flexDirection: 'row',
@@ -205,14 +287,41 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     resultText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 18,
         color: '#ffffffff',
     },
     countText: {
-        fontFamily: 'JuliaMono-Light',
+        fontFamily: 'Courier-Prime',
         fontSize: 18,
         color: '#ffffffff',
         fontWeight: 'bold',
+    },
+    chartContainer: {
+        width: '100%',
+        marginTop: 20,
+        marginBottom: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        borderRadius: 15,
+        padding: 15,
+    },
+    mainScrollView: {
+        flex: 1,
+        width: '100%',
+        marginBottom: 20,
+    },
+    scrollContent: {
+        paddingBottom: 40,
+    },
+    voteBarsSection: {
+        width: '100%',
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontFamily: 'Courier-Prime',
+        fontSize: 22,
+        color: '#ffffffff',
+        marginBottom: 15,
+        textAlign: 'center',
     },
 });

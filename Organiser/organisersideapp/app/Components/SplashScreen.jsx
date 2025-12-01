@@ -48,9 +48,9 @@ const SplashScreen = () => {
         }}>
         <Image source={require('../../assets/images/logo2.png')} style={{ width: 80, height: 120 }} />
 
-        <Text style={{ fontSize: 30, textAlign: 'center', margin: 10, fontFamily: 'ForemostRegular'}}>Event Poll</Text>
+        <Text style={{ fontSize: 30, textAlign: 'center', margin: 10, fontFamily: 'Courier-Prime'}}>Event Poll</Text>
         
-        <Text style={{fontSize:14, textAlign:'center',fontFamily:'JuliaMono-Light'}}>A live event experience tracker</Text>
+        <Text style={{fontSize:14, textAlign:'center',fontFamily:'Courier-Prime'}}>A live event experience tracker</Text>
       </FadeInView>
     </View>
   );
