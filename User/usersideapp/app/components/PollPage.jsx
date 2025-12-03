@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'rea
 import { Stack } from 'expo-router';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000'); // Replace with your server IP if needed
+const socket = io('http://localhost:3000'); 
 
 export default function PollPage() {
     const [pollData, setPollData] = useState(null);
@@ -71,6 +71,8 @@ export default function PollPage() {
         </View>
     );
 }
+
+//StyleSheet --
 
 const styles = StyleSheet.create({
     container: {

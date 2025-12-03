@@ -83,8 +83,7 @@ const Signin = () => {
     );
 }
 
-//StyleSheet -------------------------------------------------------------------------------------
-
+//StyleSheet --
 const styles = StyleSheet.create({
     container: {
         flex: 1,

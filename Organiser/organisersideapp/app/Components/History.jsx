@@ -28,7 +28,6 @@ export default function History() {
                     id,
                     ...poll
                 }));
-                // Sort by creation date, newest first
                 pollsArray.sort((a, b) => b.createdAt - a.createdAt);
                 setPolls(pollsArray);
             } else {

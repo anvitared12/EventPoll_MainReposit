@@ -83,7 +83,7 @@ const Login = () => {
 export default Login;
 
 
-// StyleSheet ---------------------------------------------------------------------------------
+// StyleSheet --
 
 const styles = StyleSheet.create({
     container: {

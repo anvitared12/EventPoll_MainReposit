@@ -6,9 +6,10 @@ import io from 'socket.io-client';
 import { database } from '../../firebaseConfig';
 import { ref, push, set, update } from 'firebase/database';
 import { useAuth } from '../context/AuthContext';
-import { Chart } from 'react-google-charts';
+import { PieChart } from 'react-native-chart-kit';
+import { Dimensions } from 'react-native';
 
-const socket = io('http://localhost:3000'); // Replace with your server IP if needed
+const socket = io('http://localhost:3000'); 
 
 export default function Option() {
     const router = useRouter();
@@ -24,7 +25,7 @@ export default function Option() {
             console.log("Poll update received:", data);
             setLiveResults(data);
             
-            // Update Firebase with new vote counts
+
             if (currentPollId && user) {
                 const pollRef = ref(database, `userPolls/${user.uid}/${currentPollId}`);
                 const totalVotes = data.options.reduce((sum, opt) => sum + opt.count, 0);
@@ -57,7 +58,7 @@ export default function Option() {
         };
         console.log('Going Live:', pollData);
         
-        // Save to Firebase
+
         if (user) {
             const userPollsRef = ref(database, `userPolls/${user.uid}`);
             const newPollRef = push(userPollsRef);
@@ -74,7 +75,7 @@ export default function Option() {
             setCurrentPollId(pollId);
         }
         
-        // Emit to socket for real-time updates
+
         socket.emit("create_poll", pollData);
         setIsLive(true);
         setLiveResults({
@@ -91,7 +92,7 @@ export default function Option() {
                 <Text style={styles.questionText}>{liveResults?.question}</Text>
                 
                 <ScrollView style={styles.mainScrollView} contentContainerStyle={styles.scrollContent}>
-                    {/* Vote Count Bars */}
+
                     <View style={styles.voteBarsSection}>
                         <Text style={styles.sectionTitle}>Vote Counts</Text>
                         {liveResults?.options.map((opt, index) => (
@@ -102,35 +103,29 @@ export default function Option() {
                         ))}
                     </View>
 
-                    {/* Pie Chart */}
+
                     <View style={styles.chartContainer}>
-                        <Chart
-                            chartType="PieChart"
-                            data={[
-                                ["Option", "Votes"],
-                                ...liveResults?.options.map(opt => [opt.text, opt.count]) || []
-                            ]}
-                            options={{
-                                title: "Vote Distribution",
-                                pieHole: 0,
-                                is3D: false,
-                                colors: ['#1f0124', '#540863', '#7d0a91', '#9d4edd', '#c77dff', '#e0aaff'],
+                        <PieChart
+                            data={liveResults?.options.map((opt, index) => ({
+                                name: opt.text,
+                                population: opt.count,
+                                color: ['#1f0124', '#540863', '#7d0a91', '#9d4edd', '#c77dff', '#e0aaff'][index % 6],
+                                legendFontColor: '#ffffff',
+                                legendFontSize: 14
+                            })) || []}
+                            width={Dimensions.get('window').width - 40}
+                            height={220}
+                            chartConfig={{
                                 backgroundColor: 'transparent',
-                                titleTextStyle: {
-                                    color: '#ffffff',
-                                    fontSize: 20,
-                                    fontFamily: 'Courier-Prime'
-                                },
-                                legend: {
-                                    textStyle: {
-                                        color: '#ffffff',
-                                        fontSize: 14,
-                                        fontFamily: 'Courier-Prime'
-                                    }
-                                }
+                                backgroundGradientFrom: 'transparent',
+                                backgroundGradientTo: 'transparent',
+                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             }}
-                            width={"100%"}
-                            height={"300px"}
+                            accessor="population"
+                            backgroundColor="transparent"
+                            paddingLeft="15"
+                            absolute
                         />
                     </View>
                 </ScrollView>
@@ -140,7 +135,7 @@ export default function Option() {
                     onPress={async () => {
                         console.log('Ending Poll');
                         
-                        // Update Firebase status to 'ended'
+ 
                         if (currentPollId && user) {
                             const pollRef = ref(database, `userPolls/${user.uid}/${currentPollId}`);
                             await update(pollRef, {
@@ -204,6 +199,8 @@ export default function Option() {
     );
 }
 
+
+//Stylesheet--
 const styles = StyleSheet.create({
     container: {
         flex: 1,

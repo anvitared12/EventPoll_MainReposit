@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, Text, View, Image} from 'react-native';
-import {router} from 'expo-router'
+import {router, Stack} from 'expo-router'
 
 const FadeInView = props => {
   const fadeAnim = useRef(new Animated.Value(0)).current; 
@@ -39,6 +39,7 @@ const SplashScreen = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
+      <Stack.Screen options={{ headerShown: false }} />
       <FadeInView
         style={{
           width: 250,

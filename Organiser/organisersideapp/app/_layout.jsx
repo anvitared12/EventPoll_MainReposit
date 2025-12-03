@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { AuthProvider } from './context/AuthContext';
 
-// Keep the splash screen visible while we fetch resources
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

@@ -47,7 +47,7 @@ export default function PollCreate() {
 }
 
 
-//StyleSheet -------------------------------------------------------------------------------------
+//StyleSheet --
 const styles = StyleSheet.create({
     container: {
         flex: 1,
