@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 
-const socket = io('http://localhost:3000'); 
+const socket = io('https://eventpoll-signaling-server.onrender.com'); 
 
 export default function Option() {
     const router = useRouter();
