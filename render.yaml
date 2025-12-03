@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: eventpoll-signaling-server
+    runtime: node
+    rootDir: SignalingServer
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+    plan: free
