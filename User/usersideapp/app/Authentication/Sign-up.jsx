@@ -26,7 +26,7 @@ const Signin = () => {
     };
 
     return (
-        <LinearGradient colors={['#2c5affff', '#7fa3dfff']} style={styles.container}>
+        <LinearGradient colors={['#7c767694', '#ffffffff']} style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
 
             <Text style={styles.headerText}>Sign Up</Text>
@@ -35,7 +35,7 @@ const Signin = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter Name"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={name}
                     onChangeText={setName}
                     editable={!loading}
@@ -43,7 +43,7 @@ const Signin = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter email"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
@@ -53,7 +53,7 @@ const Signin = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter password"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Courier-Prime',
         fontSize: 48,
         marginBottom: 60,
-        color: '#041347',
+        color: '#2c2c2cff',
     },
     inputContainer: {
         width: '100%',
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         color: '#2D2D2D',
     },
     button: {
-        backgroundColor: '#041347',
+        backgroundColor: '#2c2c2cff',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 25,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     loginText: {
         fontFamily: 'Courier-Prime',
         fontSize: 16,
-        color: '#4E270C',
+        color: '#2c2c2cff',
         marginTop: 15,
     },
 });

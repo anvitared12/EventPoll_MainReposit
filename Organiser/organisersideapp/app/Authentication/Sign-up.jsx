@@ -27,7 +27,7 @@ const Signin = () => {
     };
 
     return (
-        <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
+        <LinearGradient colors={['#c3b3b3ff', '#fdfdfdff']} style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
 
             <Text style={styles.headerText}>Sign Up</Text>
@@ -36,7 +36,7 @@ const Signin = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter Name"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={name}
                     onChangeText={setName}
                     editable={!loading}
@@ -44,7 +44,7 @@ const Signin = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter email"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
@@ -54,7 +54,7 @@ const Signin = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter password"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry

@@ -57,7 +57,7 @@ export default function History() {
 
     if (loading) {
         return (
-            <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
+            <LinearGradient colors={['#c3b3b3ff', '#fdfdfdff']} style={styles.container}>
                 <Stack.Screen options={{ headerShown: false }} />
                 <ActivityIndicator size="large" color="#ffffffff" />
             </LinearGradient>
@@ -65,7 +65,7 @@ export default function History() {
     }
 
     return (
-        <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
+        <LinearGradient colors={['#c3b3b3ff', '#fdfdfdff']} style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
 
             <TouchableOpacity 
@@ -145,14 +145,14 @@ const styles = StyleSheet.create({
     backButtonText: {
         fontFamily: 'Courier-Prime',
         fontSize: 20,
-        color: '#240056ff',
+        color: '#373639ff',
     },
     headerText: {
         fontFamily: 'Courier-Prime',
         fontSize: 36,
         marginTop: 80,
         marginBottom: 30,
-        color: '#ffffffff',
+        color: '#232323ff',
         textAlign: 'center',
     },
     emptyContainer: {
@@ -163,13 +163,13 @@ const styles = StyleSheet.create({
     emptyText: {
         fontFamily: 'Courier-Prime',
         fontSize: 24,
-        color: '#ffffffff',
+        color: '#373639ff',
         marginBottom: 10,
     },
     emptySubtext: {
         fontFamily: 'Courier-Prime',
         fontSize: 16,
-        color: 'rgba(255, 255, 255, 0.7)',
+        color: 'rgba(43, 43, 43, 0.7)',
     },
     pollsList: {
         flex: 1,
@@ -198,13 +198,13 @@ const styles = StyleSheet.create({
     pollQuestion: {
         fontFamily: 'Courier-Prime',
         fontSize: 20,
-        color: '#ffffffff',
+        color: '#272626ff',
         marginBottom: 5,
     },
     pollDate: {
         fontFamily: 'Courier-Prime',
         fontSize: 14,
-        color: 'rgba(255, 255, 255, 0.7)',
+        color: 'rgba(37, 37, 37, 0.7)',
     },
     statusBadge: {
         paddingHorizontal: 12,
@@ -221,13 +221,13 @@ const styles = StyleSheet.create({
     statusText: {
         fontFamily: 'Courier-Prime',
         fontSize: 12,
-        color: '#ffffffff',
+        color: '#222222ff',
         fontWeight: 'bold',
     },
     totalVotes: {
         fontFamily: 'Courier-Prime',
         fontSize: 14,
-        color: '#ffffffff',
+        color: '#222222ff',
     },
     pollDetails: {
         marginTop: 15,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     detailsHeader: {
         fontFamily: 'Courier-Prime',
         fontSize: 18,
-        color: '#ffffffff',
+        color: '#222222ff',
         marginBottom: 10,
         fontWeight: 'bold',
     },
@@ -253,12 +253,12 @@ const styles = StyleSheet.create({
     optionText: {
         fontFamily: 'Courier-Prime',
         fontSize: 16,
-        color: '#ffffffff',
+        color: '#222222ff',
     },
     optionCount: {
         fontFamily: 'Courier-Prime',
         fontSize: 14,
-        color: 'rgba(255, 255, 255, 0.8)',
+        color: '#222222ff',
     },
     progressBarContainer: {
         height: 8,

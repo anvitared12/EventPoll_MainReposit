@@ -26,7 +26,7 @@ const Login = () => {
     };
 
     return (
-        <LinearGradient colors={['#2c5affff', '#7fa3dfff']} style={styles.container}>
+        <LinearGradient colors={['#7c767694', '#ffffffff']} style={styles.container}>
             <Stack.Screen options={{
                 headerShown: false
             }} />
@@ -38,7 +38,7 @@ const Login = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter Email"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={Lemail}
                     onChangeText={LsetEmail}
                     keyboardType="email-address"
@@ -49,7 +49,7 @@ const Login = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter password"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#000000ff"
                     value={Lpassword}
                     onChangeText={setLpassword}
                     secureTextEntry
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Courier-Prime',
         fontSize: 48,
         marginBottom: 60,
-        color: '#041347',
+        color: '#2c2c2cff',
     },
     inputContainer: {
         width: '100%',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         color: '#2D2D2D',
     },
     button: {
-        backgroundColor: '#041347',
+        backgroundColor: '#2c2c2cff',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 25,

@@ -86,7 +86,7 @@ export default function Option() {
 
     if (isLive) {
         return (
-            <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
+            <LinearGradient colors={['#c3b3b3ff', '#fdfdfdff']} style={styles.container}>
                 <Stack.Screen options={{ headerShown: false }} />
                 <Text style={styles.headerText}>Live Results</Text>
                 <Text style={styles.questionText}>{liveResults?.question}</Text>
@@ -110,7 +110,7 @@ export default function Option() {
                                 name: opt.text,
                                 population: opt.count,
                                 color: ['#1f0124', '#540863', '#7d0a91', '#9d4edd', '#c77dff', '#e0aaff'][index % 6],
-                                legendFontColor: '#ffffff',
+                                legendFontColor: '#202020ff',
                                 legendFontSize: 14
                             })) || []}
                             width={Dimensions.get('window').width - 40}
@@ -156,7 +156,7 @@ export default function Option() {
     }
 
     return (
-        <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
+        <LinearGradient colors={['#c3b3b3ff', '#fdfdfdff']} style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
 
             <TouchableOpacity 
@@ -171,7 +171,7 @@ export default function Option() {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter your question"
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor="#363637ff"
                     value={name}
                     onChangeText={setName} />
 
@@ -180,7 +180,7 @@ export default function Option() {
                         key={index}
                         style={styles.input}
                         placeholder={`Option ${index + 1}`}
-                        placeholderTextColor="#C4C4C4"
+                        placeholderTextColor="#363637ff"
                         value={option}
                         onChangeText={(text) => handleOptionChange(text, index)}
                     />
@@ -212,14 +212,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Courier-Prime',
         fontSize: 48,
         marginBottom: 40,
-        color: '#ffffffff',
+        color: '#2a2a2aff',
         textAlign: 'center',
     },
     questionText: {
         fontFamily: 'Courier-Prime',
         fontSize: 24,
         marginBottom: 30,
-        color: '#ffffffff',
+        color: '#222222ff',
         textAlign: 'center',
     },
     inputContainer: {
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
         color: '#2D2D2D',
     },
     button: {
-        backgroundColor: '#1f0124ff',
+        backgroundColor: '#1f1f1fff',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 25,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     addButtonText: {
         fontFamily: 'Courier-Prime',
         fontSize: 18,
-        color: '#ffffffff',
+        color: '#2c2b2bff',
     },
     backButton: {
         position: 'absolute',
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     backButtonText: {
         fontFamily: 'Courier-Prime',
         fontSize: 20,
-        color: '#240056ff',
+        color: '#363637ff',
     },
     resultsContainer: {
         width: '100%',
@@ -286,12 +286,12 @@ const styles = StyleSheet.create({
     resultText: {
         fontFamily: 'Courier-Prime',
         fontSize: 18,
-        color: '#ffffffff',
+        color: '#292929ff',
     },
     countText: {
         fontFamily: 'Courier-Prime',
         fontSize: 18,
-        color: '#ffffffff',
+        color: '#3d3d3dff',
         fontWeight: 'bold',
     },
     chartContainer: {
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontFamily: 'Courier-Prime',
         fontSize: 22,
-        color: '#ffffffff',
+        color: '#454545ff',
         marginBottom: 15,
         textAlign: 'center',
     },

@@ -17,7 +17,7 @@ export default function PollCreate() {
     };
 
     return (
-        <LinearGradient colors={['#540863', '#fdfdfdff']} style={styles.container}>
+        <LinearGradient colors={['#c3b3b3ff', '#fdfdfdff']} style={styles.container}>
             <Stack.Screen options={{
                 headerShown: false
             }} />
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         fontSize: 25,
-        color: '#3d0050ff',
+        color: '#373639ff',
         fontFamily:'Courier-Prime'
     },
     logoutButton: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     },
     logoutText: {
         fontSize: 14,
-        color: '#3d0050ff',
+        color: '#363437ff',
         fontFamily: 'Courier-Prime',
     },
     buttonContainer: {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     buttonText: {
-        color: '#45048aff',
+        color: '#383739ff',
         fontSize: 20,
         fontWeight: 'bold',
         fontFamily: 'Courier-Prime',
