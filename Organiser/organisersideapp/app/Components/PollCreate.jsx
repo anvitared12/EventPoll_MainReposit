@@ -38,6 +38,10 @@ export default function PollCreate() {
                     <Text style={styles.buttonText}>Post your Question</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.button} onPress={() => router.push('/Components/Descriptive')}>
+                    <Text style={styles.buttonText}>Post Descriptive Question</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.button} onPress={() => router.push('/Components/History')}>
                     <Text style={styles.buttonText}>History and Statistics</Text>
                 </TouchableOpacity>

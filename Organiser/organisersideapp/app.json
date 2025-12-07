@@ -1,19 +1,21 @@
 {
   "expo": {
-    "extra": {
-      "eas": {
-        "projectId": "51d4a224-aaf4-4a76-9acc-d3ce94734ad1"
-      }
-    },
     "android": {
       "package": "com.fighter_flamingo.organisersideapp"
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "updates": {
-      "url": "https://u.expo.dev/51d4a224-aaf4-4a76-9acc-d3ce94734ad1"
+    "ios": {
+      "bundleIdentifier": "com.peterpenguin.organisersideapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
-    "ios": {}
+    "extra": {
+      "eas": {
+        "projectId": "e354555c-dc7c-437b-b75d-906ea1a7997c"
+      }
+    }
   }
 }

@@ -104,22 +104,37 @@ export default function History() {
                             {expandedPoll === poll.id && (
                                 <View style={styles.pollDetails}>
                                     <Text style={styles.detailsHeader}>Results:</Text>
-                                    {poll.options.map((option, index) => (
-                                        <View key={index} style={styles.optionRow}>
-                                            <View style={styles.optionInfo}>
-                                                <Text style={styles.optionText}>{option.text}</Text>
-                                                <Text style={styles.optionCount}>{option.count} votes ({calculatePercentage(option.count, poll.totalVotes || 0)}%)</Text>
-                                            </View>
-                                            <View style={styles.progressBarContainer}>
-                                                <View 
-                                                    style={[
-                                                        styles.progressBar, 
-                                                        { width: `${calculatePercentage(option.count, poll.totalVotes || 0)}%` }
-                                                    ]} 
-                                                />
-                                            </View>
+                                    {poll.type === 'descriptive' ? (
+                                        <View>
+                                            {poll.answers ? (
+                                                Object.values(poll.answers).map((answer, index) => (
+                                                    <View key={index} style={styles.answerRow}>
+                                                        <Text style={styles.answerTextHistory}>{answer.text}</Text>
+                                                        <Text style={styles.answerDate}>{formatDate(answer.createdAt)}</Text>
+                                                    </View>
+                                                ))
+                                            ) : (
+                                                <Text style={styles.noAnswersText}>No answers received yet.</Text>
+                                            )}
                                         </View>
-                                    ))}
+                                    ) : (
+                                        poll.options && poll.options.map((option, index) => (
+                                            <View key={index} style={styles.optionRow}>
+                                                <View style={styles.optionInfo}>
+                                                    <Text style={styles.optionText}>{option.text}</Text>
+                                                    <Text style={styles.optionCount}>{option.count} votes ({calculatePercentage(option.count, poll.totalVotes || 0)}%)</Text>
+                                                </View>
+                                                <View style={styles.progressBarContainer}>
+                                                    <View 
+                                                        style={[
+                                                            styles.progressBar, 
+                                                            { width: `${calculatePercentage(option.count, poll.totalVotes || 0)}%` }
+                                                        ]} 
+                                                    />
+                                                </View>
+                                            </View>
+                                        ))
+                                    )}
                                 </View>
                             )}
                         </View>
@@ -270,5 +285,29 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: '#4CAF50',
         borderRadius: 4,
+    },
+    answerRow: {
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        padding: 10,
+        borderRadius: 8,
+        marginBottom: 8,
+    },
+    answerTextHistory: {
+        fontFamily: 'Courier-Prime',
+        fontSize: 16,
+        color: '#222',
+        marginBottom: 5,
+    },
+    answerDate: {
+        fontFamily: 'Courier-Prime',
+        fontSize: 12,
+        color: 'rgba(34, 34, 34, 0.6)',
+        textAlign: 'right',
+    },
+    noAnswersText: {
+        fontFamily: 'Courier-Prime',
+        fontSize: 14,
+        color: '#555',
+        fontStyle: 'italic',
     },
 });

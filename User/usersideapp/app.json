@@ -1,8 +1,9 @@
 {
   "expo": {
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "c00d1136-4dcd-45ac-acd5-775a174e5409"
+        "projectId": "793d9a33-ec0c-4d34-ae80-c4f08ebd80f1"
       }
     },
     "android": {

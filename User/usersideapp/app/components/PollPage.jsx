@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput } from 'react-native';
 import { Stack } from 'expo-router';
 import io from 'socket.io-client';
 
@@ -8,12 +8,14 @@ const socket = io('https://eventpoll-signaling-server.onrender.com');
 export default function PollPage() {
     const [pollData, setPollData] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
+    const [answerText, setAnswerText] = useState('');
 
     useEffect(() => {
         socket.on("new_poll", (data) => {
             console.log("New poll received:", data);
             setPollData(data);
             setHasVoted(false);
+            setAnswerText('');
         });
 
         socket.on("poll_ended", () => {
@@ -40,6 +42,29 @@ export default function PollPage() {
         Alert.alert("Vote Submitted", "Thank you for voting!");
     };
 
+    const handleDescriptiveSubmit = () => {
+        if (hasVoted) {
+            Alert.alert("Already Voted", "You have already voted in this poll.");
+            return;
+        }
+        if (!answerText.trim()) {
+            Alert.alert("Empty Answer", "Please type an answer.");
+            return;
+        }
+
+        if (pollData && pollData.pollId) {
+             socket.emit("submit_descriptive_vote", {
+                 pollId: pollData.pollId,
+                 text: answerText,
+                 createdAt: Date.now()
+             });
+             setHasVoted(true);
+             Alert.alert("Response Submitted", "Your answer has been sent.");
+        } else {
+             Alert.alert("Error", "Poll configuration error.");
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
@@ -48,18 +73,40 @@ export default function PollPage() {
             {pollData ? (
                 <View style={styles.pollContainer}>
                     <Text style={styles.question}>{pollData.question}</Text>
-                    <ScrollView style={styles.optionsContainer}>
-                        {pollData.options.map((option) => (
+                    
+                    {pollData.type === 'descriptive' ? (
+                        <View style={styles.descriptiveContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Type your answer here..."
+                                placeholderTextColor="#999"
+                                value={answerText}
+                                onChangeText={setAnswerText}
+                                multiline
+                                editable={!hasVoted}
+                            />
                             <TouchableOpacity 
-                                key={option.id} 
-                                style={[styles.optionButton, hasVoted && styles.disabledButton]} 
-                                onPress={() => handleVote(option.id)}
+                                style={[styles.submitButton, hasVoted && styles.disabledButton]}
+                                onPress={handleDescriptiveSubmit}
                                 disabled={hasVoted}
                             >
-                                <Text style={styles.optionText}>{option.text}</Text>
+                                <Text style={styles.submitButtonText}>Submit Answer</Text>
                             </TouchableOpacity>
-                        ))}
-                    </ScrollView>
+                        </View>
+                    ) : (
+                        <ScrollView style={styles.optionsContainer}>
+                            {pollData.options && pollData.options.map((option) => (
+                                <TouchableOpacity 
+                                    key={option.id} 
+                                    style={[styles.optionButton, hasVoted && styles.disabledButton]} 
+                                    onPress={() => handleVote(option.id)}
+                                    disabled={hasVoted}
+                                >
+                                    <Text style={styles.optionText}>{option.text}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    )}
                     {hasVoted && <Text style={styles.votedText}>Vote Submitted!</Text>}
                 </View>
             ) : (
@@ -135,6 +182,34 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 18,
         color: 'green',
+        fontWeight: 'bold',
+    },
+    descriptiveContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    input: {
+        width: '100%',
+        backgroundColor: '#fff',
+        padding: 15,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        marginBottom: 20,
+        minHeight: 100,
+        textAlignVertical: 'top',
+        fontSize: 16,
+    },
+    submitButton: {
+        backgroundColor: '#28a745',
+        padding: 15,
+        borderRadius: 10,
+        width: '50%',
+        alignItems: 'center',
+    },
+    submitButtonText: {
+        color: 'white',
+        fontSize: 18,
         fontWeight: 'bold',
     },
 });

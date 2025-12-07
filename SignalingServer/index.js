@@ -29,14 +29,21 @@ io.on("connection",(socket)=>{
         console.log("Poll creted",pollData);
         activePoll = pollData;
 
-        pollResults = {
-            question:pollData.question,
-            options:pollData.options.map((opt)=>({
-                id:opt.id,
-                text:opt.text,
-                count:0,
-            })),
-        };
+        if (pollData.options) {
+            pollResults = {
+                question: pollData.question,
+                options: pollData.options.map((opt) => ({
+                    id: opt.id,
+                    text: opt.text,
+                    count: 0,
+                })),
+            };
+        } else {
+            pollResults = {
+                question: pollData.question,
+                options: [],
+            };
+        }
 
         io.emit("new_poll",activePoll);
     });
@@ -61,6 +68,11 @@ io.on("connection",(socket)=>{
         activePoll = null;
         pollResults = { options: [] };
         io.emit("poll_ended");
+    });
+
+    socket.on("submit_descriptive_vote", (data) => {
+        console.log("Descriptive vote received", data);
+        io.emit("receive_descriptive_vote", data);
     });
 
     socket.on("disconnect",()=>{
